@@ -1,0 +1,20 @@
+# tf state files
+*.tfstate
+*.tfstate.*
+
+crash.log
+
+
+.terraform/
+
+
+*.tfbackup
+
+
+.terraformrc
+terraform.rc
+
+
+.vscode/
+.idea/
+.DS_Store
