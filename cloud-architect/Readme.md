@@ -1,0 +1,11 @@
+# Assumptions Made
+
+1) Region Selection: Our user base is within the UK, hence we chose eu-west-2 as the region. If the user base is global, we should consider deploying DynamoDB globally, with a replica in each relevant region.
+2) Limitations Discovered: Found out that only Lambdas and VTL resolvers allow TransactWriteItems, which is the only way to ensure true atomicity. Therefore, the only solution is to give up on atomicity and try mitigating the potential of data inconsistencies through error handling and using multiple functions in the pipeline resolvers.
+3) Environment Setup: For the sake of moving fast, we’ll only have the production environment.
+4) Infrastructure Collaboration: Multiple people will be working on the infrastructure, meaning we’ll need a remote state with locking. In our case, S3 with DynamoDB makes the most sense. Which is what we discussed about in our interview.
+5) JS Resolvers Organization: We should have the JS resolvers in their own external files to facilitate separation of concerns and enable multiple engineers to own different bits of the product.
+6) DynamoDB Billing Mode: Given that we aren’t aware of the type of usage our app will experience, we’ll choose the flexible PAY_PER_REQUEST model for DynamoDB.
+7) AppSync Authentication: For the authentication type for AppSync, we went with API_KEY as it’s the simplest form for our quick example.
+8) Tracking Schema Changes: We need to be able to track the changes in schema.graphql. Initially, we wanted to compute a hash of the file and have a trigger, but the aws_appsync_graphql_api resource doesn’t seem to allow triggers. Another automated solution would be using null_resource and hash to trigger a redeployment when the schema changes. For the sake of our quick exercise, we’ll just remember to taint the resource when the schema.graphql changes.
+9) Time Spent on Resolvers, Formats and changing the infrastructure logic once I realised js resolvers don't allow atomicity: Spend over 1.5 hours trying to figure out the exact format aws_appsync_function and aws_appsync_resolver were supposed to be in for JS code, instead of VTL, and what the library limitations of JS for the runtime used by AppSync were and dealing with changing the infra from atomic VTL transactions to the hacky js way of making sure we have the same timestamp in all tables.
