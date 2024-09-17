@@ -33,3 +33,21 @@ resource "aws_dynamodb_table" "messages" {
     Name = "Messages Table"
   }
 }
+
+
+output "users_table_name" {
+  value = aws_dynamodb_table.users.name
+}
+
+output "messages_table_name" {
+  value = aws_dynamodb_table.messages.name
+}
+
+
+output "users_table_arn" {
+  value = aws_dynamodb_table.users.arn
+}
+
+output "messages_table_arn" {
+  value = aws_dynamodb_table.messages.arn
+}

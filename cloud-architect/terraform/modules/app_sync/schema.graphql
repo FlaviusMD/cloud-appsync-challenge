@@ -1,0 +1,21 @@
+scalar AWSTimestamp
+
+type Mutation {
+  addComment(userUuid: String!, messageText: String!): Comment
+}
+
+type Comment {
+  userUuid: String!
+  messageTimestamp: AWSTimestamp!
+  messageText: String!
+}
+
+# Forced by Appsync to have a query.
+type Query {
+  _none: String
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
